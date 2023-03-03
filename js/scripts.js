@@ -1016,7 +1016,10 @@ let smoother = ScrollSmoother.create({
 
 
 
-//=include ../blocks/**/*.js
+const triangle = document.getElementById("triangle");
+addEventListener("resize", (event) => {
+    triangle.style.transform = "scale("+window.innerHeight/1080+")";
+});
 
 //=include custom/*.js
 
