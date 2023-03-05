@@ -1,2 +1,2 @@
-:root{--horizontal-spacer:4.16667vw}.container{width:100%;max-width:83.125rem;margin:0 auto;-webkit-box-sizing:border-box;box-sizing:border-box}@media(min-width:0em)and (max-width:59.5em){.container{max-width:37.5rem;padding:0 1.5rem}}@media(min-width:48em)and (max-width:90em){.container{max-width:68.75rem}}
+.container{width:100%;max-width:83.125rem;margin:0 auto;-webkit-box-sizing:border-box;box-sizing:border-box}@media(min-width:0em)and (max-width:59.5em){.container{max-width:37.5rem;padding:0 1.5rem}}@media(min-width:59.5em)and (max-width:93.75em){.container{max-width:68.75rem}}@media(min-width:59.5em)and (max-width:80em){.container{max-width:60rem}}
 /*# sourceMappingURL=essentials.css.map */
