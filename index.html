@@ -24,19 +24,15 @@
 			<div class="nav-wrap-4k">
 				<nav class="nav">
 					<div class="nav__logo">
-						<img src="@/../images/bg/logo.svg" alt="Trisolaris logo">
+						<a class="c-nav__burger nav__menu__item" href="/"><img src="@/../images/bg/logo.svg" alt="Trisolaris logo"></a>
 					</div>
 					<div class="nav__burger"></div>
 					<div class="nav__menu">
-						<div class="nav__menu__item">
-							<p>What we do</p>
-						</div>
-						<div class="nav__menu__item">
-							<p>How we work</p>
-						</div>
-						<div class="nav__menu__button">
-							<p>Contact</p>
-						</div>
+						<a class="c-nav__burger nav__menu__item" href="" role="button">What we do</a>
+						<a class="c-nav__burger nav__menu__item" href="" role="button">How we work</a>
+						<a class="c-nav__burger nav__menu__button" href="" role="button">
+							<p>Contact<p>
+						</a>
 					</div>
 				</nav>
 			</div>
@@ -48,20 +44,27 @@
 					<div class="hero__content__circle">
 						<div class="hero__content__circle__ring">
 							<div class="hero__content__circle__ring__text">
-								<h1>Reshaping the world of energies trading</h1>
-								<div class="hero__content__circle__ring__text__action">
+								<h1>Reshaping the world <br>of energies trading</h1>
+								<a class="hero__content__circle__ring__text__action" href="" role="button">
 									<p>Learn More</p>
 									<div class="hero__content__circle__ring__text__action__button">
 										<svg width="9" height="6" viewBox="0 0 9 6" fill="none" xmlns="http://www.w3.org/2000/svg">
 											<path d="M8.0814 1.11123C7.97592 1.00812 7.83287 0.950195 7.68371 0.950195C7.53456 0.950195 7.39151 1.00812 7.28603 1.11123L4.50165 3.83373L1.71728 1.11123C1.61119 1.01104 1.4691 0.955604 1.32161 0.956857C1.17413 0.95811 1.03305 1.01595 0.928754 1.11793C0.824461 1.2199 0.765305 1.35785 0.764023 1.50206C0.762742 1.64627 0.819438 1.7852 0.921902 1.88893L4.10396 5.00028C4.20945 5.10339 4.3525 5.16131 4.50165 5.16131C4.65081 5.16131 4.79385 5.10339 4.89934 5.00028L8.0814 1.88893C8.18685 1.78579 8.24609 1.64592 8.24609 1.50008C8.24609 1.35424 8.18685 1.21437 8.0814 1.11123Z" fill="white" />
 										</svg>
 									</div>
-								</div>
+								</a>
 							</div>
 						</div>
 					</div>
 				</div>
 				<div class="hero__shape">
+					<!--
+        <svg width="1920" height="1553" viewBox="0 0 1920 1553" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="1619" cy="636" r="8" fill="white"/>
+            <path opacity="0.3" d="M960 697L512 215M960 697L670.5 1337.5M960 697L1622 635.5M512 215L670.5 1337.5M512 215L1622 635.5M670.5 1337.5L1622 635.5" stroke="white" stroke-width="0.5"/>
+            <circle cx="512" cy="215" r="8" fill="white"/>
+        </svg>
+        -->
 					<svg width="1100" height="1100" id="triangle" viewBox="0 0 1100 1100" fill="none" xmlns="http://www.w3.org/2000/svg">
 						<circle id="shape-circle-one" cx="8" cy="8" r="8" fill="white" />
 						<circle id="shape-circle-two" cx="8" cy="1092" r="8" fill="white" />
@@ -103,14 +106,14 @@
 				<div class="container white__secondText">
 					<div class="white__secondText__wrap">
 						<p>Our team thrives on pushing boundaries and implementing forward-thinking approaches to our work. We rigorously implement modern solutions to existing methods to improve in everything we do. We believe that innovation and technological advancements are essential to strengthening our capabilities and increasing our accomplishments.</p>
-						<div class="white__secondText__wrap__button">
+						<a href="" role="button" class="white__secondText__wrap__button">
 							<p>How we work</p>
 							<div class="white__secondText__wrap__button__circle">
 								<svg width="9" height="6" viewBox="0 0 9 6" fill="none" xmlns="http://www.w3.org/2000/svg">
 									<path d="M8.0814 1.11123C7.97592 1.00812 7.83287 0.950195 7.68371 0.950195C7.53456 0.950195 7.39151 1.00812 7.28603 1.11123L4.50165 3.83373L1.71728 1.11123C1.61119 1.01104 1.4691 0.955604 1.32161 0.956857C1.17413 0.95811 1.03305 1.01595 0.928754 1.11793C0.824461 1.2199 0.765305 1.35785 0.764023 1.50206C0.762742 1.64627 0.819438 1.7852 0.921902 1.88893L4.10396 5.00028C4.20945 5.10339 4.3525 5.16131 4.50165 5.16131C4.65081 5.16131 4.79385 5.10339 4.89934 5.00028L8.0814 1.88893C8.18685 1.78579 8.24609 1.64592 8.24609 1.50008C8.24609 1.35424 8.18685 1.21437 8.0814 1.11123Z" fill="white" />
 								</svg>
 							</div>
-						</div>
+						</a>
 					</div>
 				</div>
 			</section>
@@ -146,6 +149,7 @@
 				<div class="bottom__bg">
 					<div class="bottom__bg__overlay"></div>
 					<div class="bottom__bg__gradient"></div>
+					<img src="@/../images/bg/bg-bottom-nogap.png" alt="Background mountains">
 				</div>
 				<div class="bottom__circleWrap">
 					<div class="bottom__circleWrap__circle"></div>
@@ -158,15 +162,9 @@
 					<div class="bottom__content__contacts container">
 						<div class="bottom__content__contacts__item">
 							<h4>Pages</h4>
-							<a href="">
-								<p class="bottom__content__contacts__item-underline">What we do</p>
-							</a>
-							<a href="">
-								<p class="bottom__content__contacts__item-underline">How we work</p>
-							</a>
-							<a href="">
-								<p class="bottom__content__contacts__item-underline">Contact</p>
-							</a>
+							<a class="bottom__content__contacts__item-underline" href="" role="button">What we do</a>
+							<a class="bottom__content__contacts__item-underline" href="" role="button">How we work</a>
+							<a class="bottom__content__contacts__item-underline" href="" role="button">Contact</a>
 						</div>
 						<div class="bottom__content__contacts__item">
 							<h4>Company</h4>
@@ -179,30 +177,16 @@
 						</div>
 						<div class="bottom__content__contacts__item">
 							<h4>Contact</h4>
-							<a href="">
-								<p>Phone: +41 41 XXX</p>
-							</a>
-							<a href="">
-								<p>E-mail: info@trisolaris.ch</p>
-							</a>
-							<a href="">
-								<p>Web: www.trisolaris.ch</p>
-							</a>
+							<a href="" role="button">Phone: +41 41 XXX</a>
+							<a href="" role="button">E-mail: info@trisolaris.ch</a>
+							<a href="" role="button">Web: www.trisolaris.ch</a>
 						</div>
 						<div class="bottom__content__contacts__item">
 							<h4>Social media</h4>
-							<a href="">
-								<p class="bottom__content__contacts__item-underline">Linkedin</p>
-							</a>
-							<a href="">
-								<p class="bottom__content__contacts__item-underline">Instagram</p>
-							</a>
-							<a href="">
-								<p class="bottom__content__contacts__item-underline">Twitter</p>
-							</a>
-							<a href="">
-								<p class="bottom__content__contacts__item-underline">Facebook</p>
-							</a>
+							<a class="bottom__content__contacts__item-underline" href="" role="button">Linkedin</a>
+							<a class="bottom__content__contacts__item-underline" href="" role="button">Instagram</a>
+							<a class="bottom__content__contacts__item-underline" href="" role="button">Twitter</a>
+							<a class="bottom__content__contacts__item-underline" href="" role="button">Facebook</a>
 						</div>
 					</div>
 					<div class="bottom__content__copyright">
@@ -216,7 +200,7 @@
 	<script type="text/js" src="js/vendor/gsap.min.js"></script>
 	<script type="text/js" src="js/ScrollSmoother.min.js"></script>
 	<script type="text/js" src="js/ScrollTrigger.min.js"></script>
-	<script src="js/scripts.js?202303043575"></script>
+	<script src="js/scripts.js?20230306728"></script>
 </body>
 
 </html>

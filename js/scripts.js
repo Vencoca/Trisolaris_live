@@ -1016,13 +1016,17 @@ let smoother = ScrollSmoother.create({
 
 
 
+
 const triangle = document.getElementById("triangle");
-addEventListener("resize", (event) => {
-    triangle.style.transform = "scale("+window.innerHeight/1080+")";
-});
-addEventListener("load", (event) => {
-    triangle.style.transform = "scale("+window.innerHeight/1080+")";
-});
+
+if (triangle) {
+    addEventListener("resize", (event) => {
+        triangle.style.transform = "scale("+window.innerHeight/1080+")";
+    });
+    addEventListener("load", (event) => {
+        triangle.style.transform = "scale("+window.innerHeight/1080+")";
+    });
+}
 
 //=include custom/*.js
 
