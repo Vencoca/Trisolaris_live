@@ -1027,6 +1027,88 @@ if (triangle) {
         triangle.style.transform = "scale("+window.innerHeight/1080+")";
     });
 }
+const whiteInTl = gsap.timeline({
+    onStart: () => {
+        gsap.set(".white", {transformOrigin: "bottom center"})
+    },
+    scrollTrigger: {
+        trigger: ".white",
+        start: "top bottom",
+        end: "top-=95 top",
+        scrub: 2,
+        //markers: true,
+    }
+})
+
+whiteInTl.from(".white",{
+    scaleX: 0.94,
+    scaleY: 0.9 ,
+    ease: "power1.Out",
+})
+
+gsap.from(".white__secondText",{
+    y: 100,
+    ease: "power1.In",
+    duration: 1,
+    scrollTrigger: {
+        trigger: ".white__secondText",
+        start: "top bottom",
+        // markers: true,
+    }
+})
+
+const whiteOutTl = gsap.timeline({
+    onStart: () => {
+        gsap.set(".white", {transformOrigin: "top center"})
+    },
+    onReverseComplete: () => {
+        gsap.set(".white", {transformOrigin: "bottom center"})
+    },
+    scrollTrigger: {
+        trigger: ".white",
+        start: "bottom bottom",
+        end: "bottom+=95 top",
+        scrub: 2,
+        markers: true,
+        onEnter: () => {
+            gsap.set(".white", {transformOrigin: "top center"})
+        },
+        onEnterBack: () => {
+            gsap.set(".white", {transformOrigin: "top center"})
+        },
+    }
+})
+
+whiteOutTl.to(".white",{
+    scale: 0.94,
+    ease: "power1.Out",    
+})
+whiteOutTl.to(".white",{
+    y: -300,
+    ease: "power1.Out", 
+},"<")
+
+
+gsap.from(".text__content__numbers",{
+    y: 100,
+    ease: "power1.In",
+    duration: 2,
+    scrollTrigger: {
+        trigger: ".text__content__numbers",
+        start: "top bottom",
+        // markers: true,
+    }
+})
+gsap.from(".bottom__circleWrap__circle",{
+    scale: 0.4,
+    ease: "power2.In",
+    duration: 1.2,
+    scrollTrigger: {
+        trigger: ".bottom__circleWrap__circle",
+        start: "top+=100 bottom",
+        // markers: true,
+    }
+})
 
 //=include custom/*.js
 
