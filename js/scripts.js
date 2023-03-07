@@ -1090,7 +1090,7 @@ const whiteInTl = gsap.timeline({
         trigger: ".hero",
         start: "bottom bottom",
         end: "bottom-=95 top",
-        scrub: 1,
+        scrub: true,
         //markers: true,
     }
 })
@@ -1123,8 +1123,8 @@ const whiteOutTl = gsap.timeline({
         trigger: ".text",
         start: "top center",
         end: "top top",
-        scrub: 0.5,
-        markers: true,
+        scrub: true,
+        //markers: true,
     }
 })
 whiteOutTl.to(".white",{
