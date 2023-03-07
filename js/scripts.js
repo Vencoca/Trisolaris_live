@@ -1060,29 +1060,61 @@ const loaderTl = gsap.timeline({
 })
 loaderTl.from(".hero__content",{
     scale: 0,
-    duration: 1.6,
-    ease: "power4.InOut",
+    duration: 1.2,
+    ease: "power1.Out",
 })
 loaderTl.from(".hero__shape",{
     scale: 0,
-    duration: 1.6,
-    ease: "power4.In0ut",
+    duration: 1.2,
+    ease: "power1.0ut",
 },"<")
 loaderTl.from(".hero__content__circle__ring",{
     scale: 0.7,
-    duration: 1.4,
-    ease: "power4.InOut",
+    duration: 0.9,
+    ease: "power1.Out",
 }, "<0.2")
 
 loaderTl.from(".nav",{
     y: -200,
-    duration: 1.6,
-    ease: "power4.Out",
+    duration: 1.3,
+    ease: "power1.Out",
 },"<0.7")
 
 
 const whiteTextAnimation = document.querySelector(".white-text-animation")
-colorText(whiteTextAnimation, "iris", ".hero", "bottom center");
+
+
+let mm = gsap.matchMedia();
+
+mm.add({
+  // set up any number of arbitrarily-named conditions. The function below will be called when ANY of them match.
+    isMax1440p: '(min-width: 953px) and (max-width: 1500px)',
+    isMin1440p: '(min-width: 1501px)',
+    isTablet: '(min-width: 768px) and (max-width: 952px)',
+    isMobile: '(max-width: 952px)',
+}, (context) => {
+
+    // context.conditions has a boolean property for each condition defined above indicating if it's matched or not.
+    let {isMax1440p, isMin1440p, isTablet, isMobile} = context.conditions;
+    if (!isMobile) {
+        gsap.from(".white__secondText",{
+            y: 100,
+            ease: "power1.In",
+            duration: 1,
+            scrollTrigger: {
+                trigger: ".white__secondText",
+                start: "top bottom",
+                // markers: true,
+            }
+        });
+    }
+    return () => { 
+    // optionally return a cleanup function that will be called when none of the conditions match anymore (after having matched)
+    // it'll automatically call context.revert() - do NOT do that here . Only put custom cleanup code here.
+    }
+}); 
+
+colorText(whiteTextAnimation, "iris", ".hero", "bottom center",1.5);
 
 const whiteInTl = gsap.timeline({
     duration: 10,
@@ -1107,16 +1139,7 @@ whiteInTl.from(".white__wrap",{
     ease: "power1.Out",
 },"<1")
 //-------------------------------------------
-gsap.from(".white__secondText",{
-    y: 100,
-    ease: "power1.In",
-    duration: 1,
-    scrollTrigger: {
-        trigger: ".white__secondText",
-        start: "top bottom",
-        // markers: true,
-    }
-})
+
 //-----------------------------------------
 const whiteOutTl = gsap.timeline({
     scrollTrigger: {
@@ -1175,7 +1198,7 @@ gsap.from(".bottom__circleWrap__circle",{
     }
 })
 
-function colorText(element, color, trigger = element, start = "top+=60 50%"){
+function colorText(element, color, trigger = element, start = "top+=60 70%", duration=1, ease = "none"){
 
     let childSplit = new SplitText(element, {
 
@@ -1211,9 +1234,11 @@ function colorText(element, color, trigger = element, start = "top+=60 50%"){
 
         revealTl.to(element,{
 
-            duration: 1,
+            duration: duration,
 
             backgroundPositionX: "0%",
+
+            ease: ease,
 
         })
 
