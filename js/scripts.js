@@ -1120,9 +1120,9 @@ gsap.from(".white__secondText",{
 //-----------------------------------------
 const whiteOutTl = gsap.timeline({
     scrollTrigger: {
-        trigger: ".white",
-        start: "bottom bottom",
-        end: "bottom+=95 top",
+        trigger: ".text",
+        start: "top center",
+        end: "top top",
         scrub: 0.5,
         markers: true,
     }
@@ -1139,13 +1139,16 @@ whiteOutTl.to(".white",{
 
 
 
+const textTextAnimation = document.querySelector(".text-text-animation")
+colorText(textTextAnimation, "white");
+
 const textTl = gsap.timeline({
     duration:10,
     scrollTrigger: {
-        trigger: ".text__content__divider",
-        start: "top 80%",
-        end: "bottom 35%",
-        scrub: 1,
+        trigger: ".text",
+        start: "top center",
+        end: "top top",
+        scrub: 0.5,
         //markers: true,
     }
 })
