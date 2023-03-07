@@ -1082,15 +1082,15 @@ loaderTl.from(".nav",{
 
 
 const whiteTextAnimation = document.querySelector(".white-text-animation")
-colorText(whiteTextAnimation, "iris", ".hero", "bottom top");
+colorText(whiteTextAnimation, "iris", ".hero", "bottom center");
 
 const whiteInTl = gsap.timeline({
     duration: 10,
     scrollTrigger: {
         trigger: ".hero",
         start: "bottom bottom",
-        end: "bottom-=95 top",
-        scrub: true,
+        end: "bottom 10%",
+        scrub: 0.3,
         //markers: true,
     }
 })
@@ -1122,18 +1122,18 @@ const whiteOutTl = gsap.timeline({
     scrollTrigger: {
         trigger: ".text",
         start: "top center",
-        end: "top top",
-        scrub: true,
+        end: "top -40%",
+        scrub: 0.3,
         //markers: true,
     }
 })
 whiteOutTl.to(".white__wrap",{
     scale: 0.94,
-    //ease: "power1.Out",    
+    ease: "power1.Out",    
 })
 whiteOutTl.to(".white__wrap",{
     y: -500,
-    //ease: "power1.Out", 
+    ease: "power1.Out", 
 },"<")
 
 
@@ -1169,7 +1169,7 @@ gsap.from(".bottom__circleWrap__circle",{
     ease: "power2.In",
     duration: 1.2,
     scrollTrigger: {
-        trigger: ".bottom__circleWrap__circle",
+        trigger: ".bottom__content__headline",
         start: "top bottom",
         // markers: true,
     }
