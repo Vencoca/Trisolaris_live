@@ -1076,7 +1076,7 @@ loaderTl.from(".hero__content__circle__ring",{
 
 loaderTl.from(".nav",{
     y: -200,
-    duration: 1.0,
+    duration: 1.6,
     ease: "power4.Out",
 },"<0.7")
 
@@ -1095,13 +1095,13 @@ const whiteInTl = gsap.timeline({
     }
 })
 
-whiteInTl.to(".hero__bg",{
+whiteInTl.to(".hero__bg__img",{
     duration: 10,
-    scale: 1.2,
+    scale: 1.15,
     ease: "power1.Out",
 },"<")
 
-whiteInTl.from(".white",{
+whiteInTl.from(".white__wrap",{
     duration:9,
     scale: 0.80,
     ease: "power1.Out",
@@ -1127,13 +1127,13 @@ const whiteOutTl = gsap.timeline({
         //markers: true,
     }
 })
-whiteOutTl.to(".white",{
-    scale: 0.86,
-    ease: "power1.Out",    
+whiteOutTl.to(".white__wrap",{
+    scale: 0.94,
+    //ease: "power1.Out",    
 })
-whiteOutTl.to(".white",{
+whiteOutTl.to(".white__wrap",{
     y: -500,
-    ease: "power1.Out", 
+    //ease: "power1.Out", 
 },"<")
 
 
@@ -1158,19 +1158,19 @@ textTl.from(".text__content__numbers",{
     ease: "power1.Out",
     duration: 10,
 },"<")
-
+/*
 textTl.from(".text__content",{
     y: 150,
     ease: "power1.InOut",
     duration: 8,
-},"<2")
+},"<2")*/
 gsap.from(".bottom__circleWrap__circle",{
     scale: 0.4,
     ease: "power2.In",
     duration: 1.2,
     scrollTrigger: {
         trigger: ".bottom__circleWrap__circle",
-        start: "top+=100 bottom",
+        start: "top bottom",
         // markers: true,
     }
 })
