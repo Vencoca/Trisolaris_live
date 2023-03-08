@@ -1043,19 +1043,22 @@ smoother.paused(true);
 
 const burger = document.querySelector(".nav__burger");
 const nav_menu = document.querySelector(".nav__menu");
+const burgerItems = document.querySelectorAll(".nav__menu__burger");
 let toggle = false;
 burger.addEventListener("click", showMenu);
 
 function showMenu(){
     burger.classList.toggle("nav__burger-active");
     nav_menu.classList.toggle("nav__menu-active");
+    burgerItems.forEach(element => {
+        element.classList.toggle("nav__menu__burger-active");
+    });
     gsap.to(smoother, {
         scrollTop: smoother.offset(".hero", "top top"),
         duration: 0.3,
         ease: "inOut",
     });
     toggle = !toggle;
-    console.log(toggle);
     smoother.paused(toggle);
 }
 
@@ -1069,44 +1072,87 @@ if (triangle) {
     });
 }
 
-function scrollToWhite(event){
-    event.preventDefault();
-    gsap.to(smoother, {
-        scrollTop: smoother.offset(".white", "top top"),
-        duration: 1.0,
-        ease: "inOut",
+const learnMore = document.querySelector(".hero__content__circle__ring__text__action");
+if (learnMore){
+    learnMore.addEventListener("click", (event) => {
+        event.preventDefault();
+        gsap.to(smoother, {
+            scrollTop: smoother.offset(".white", "top top"),
+            duration: 1.0,
+            ease: "inOut",
+        });
     });
 }
 
+
 const loaderTl = gsap.timeline({
-    onComplete: () => {smoother.paused(false)},
+    onComplete: () => {smoother.paused(false); trg.move(); gsap.set(".hero__shape", {overflow: "hidden"})},
 }).pause()
-loaderTl.from(".hero__content",{
-    scale: 0,
+loaderTl.to(".hero__content__circle",{
+    scale: 1,
     duration: 1.2,
     ease: "power1.Out",
 })
-loaderTl.from(".hero__shape",{
-    scale: 0,
+loaderTl.to(".hero__shape",{
+    scale: 1,
     duration: 1.2,
     ease: "power1.0ut",
 },"<")
-loaderTl.from(".hero__content__circle__ring",{
-    scale: 0.7,
+loaderTl.to(".hero__content__circle__ring",{
+    scale: 1,
     duration: 0.9,
     ease: "power1.Out",
 }, "<0.2")
 
-loaderTl.from(".nav",{
-    y: -200,
+loaderTl.to(".nav",{
+    y: 0,
     duration: 1.3,
     ease: "power1.Out",
 },"<0.7")
 
+loaderTl.to(".hero__content__circle__ring__text",{
+    transform: "scale(1) translate(-50%, -50%)",
+    duration: 1.2,
+    ease: "power1.0ut",
+},"0")
+
 window.addEventListener("load", () => {loaderTl.play()})
 
 const whiteTextAnimation = document.querySelector(".white-text-animation")
+if (whiteTextAnimation){
+    window.addEventListener("load", () => {colorText(whiteTextAnimation, "iris", ".hero", "bottom center",3)});
+}
 
+const firstImages = document.querySelectorAll(".imOne");
+const secondImages = document.querySelectorAll(".imTwo");
+const imOneTl = gsap.timeline({
+        //duration: 6,
+        repeat: -1,
+})
+firstImages.forEach(element => {
+    imOneTl.to(element, {
+        opacity: 1,
+        duration: 0.5,
+    },">-0.5")
+    imOneTl.to(element,{
+        opacity: 0,
+        duration: 0.5,
+    },">1")
+});
+const imTwoTl = gsap.timeline({
+    //duration: 6,
+    repeat: -1,
+})
+secondImages.forEach(element => {
+    imTwoTl.to(element, {
+        opacity: 1,
+        duration: 0.5,
+    },">-0.5")
+    imTwoTl.to(element,{
+        opacity: 0,
+        duration: 0.5,
+    },">1")
+});
 
 let mm = gsap.matchMedia();
 
@@ -1117,30 +1163,52 @@ mm.add({
     isTablet: '(min-width: 768px) and (max-width: 952px)',
     isMobile: '(max-width: 952px)',
 }, (context) => {
-
+    
+    
     // context.conditions has a boolean property for each condition defined above indicating if it's matched or not.
     let {isMax1440p, isMin1440p, isTablet, isMobile} = context.conditions;
     if (!isMobile) {
-        /*
-        gsap.from(".white__secondText",{
-            y: 100,
-            ease: "power1.In",
-            duration: 1,
+        const whiteOutTl = gsap.timeline({
             scrollTrigger: {
-                trigger: ".white__secondText",
-                start: "top bottom",
-                // markers: true,
+                trigger: ".text",
+                start: "top center",
+                end: "top -40%",
+                scrub: 0.3,
+                //markers: true,
             }
-        });
-        */
+        })
+        whiteOutTl.to(".white__wrap",{
+            scale: 0.94,
+            ease: "power1.Out",    
+        })
+        whiteOutTl.to(".white__wrap",{
+            y: -500,
+            ease: "power1.Out", 
+        },"<")
+    } else {
+        const whiteOutTl = gsap.timeline({
+            scrollTrigger: {
+                trigger: ".text",
+                start: "top 75%",
+                end: "top -40%",
+                scrub: 0.3,
+                markers: true,
+            }
+        })
+        whiteOutTl.to(".white__wrap",{
+            scale: 0.94,
+            ease: "power1.Out",    
+        })
+        whiteOutTl.to(".white__wrap",{
+            y: -200,
+            ease: "power1.Out", 
+        },"<")
     }
     return () => { 
     // optionally return a cleanup function that will be called when none of the conditions match anymore (after having matched)
     // it'll automatically call context.revert() - do NOT do that here . Only put custom cleanup code here.
     }
 }); 
-
-colorText(whiteTextAnimation, "iris", ".hero", "bottom center",1.5);
 
 const whiteInTl = gsap.timeline({
     duration: 10,
@@ -1167,29 +1235,13 @@ whiteInTl.from(".white__wrap",{
 //-------------------------------------------
 
 //-----------------------------------------
-const whiteOutTl = gsap.timeline({
-    scrollTrigger: {
-        trigger: ".text",
-        start: "top center",
-        end: "top -40%",
-        scrub: 0.3,
-        //markers: true,
-    }
-})
-whiteOutTl.to(".white__wrap",{
-    scale: 0.94,
-    ease: "power1.Out",    
-})
-whiteOutTl.to(".white__wrap",{
-    y: -500,
-    ease: "power1.Out", 
-},"<")
+
 
 
 
 
 const textTextAnimation = document.querySelector(".text-text-animation")
-colorText(textTextAnimation, "white");
+window.addEventListener("load", () => {colorText(textTextAnimation, "white")});
 
 const textTl = gsap.timeline({
     duration:1,
@@ -1225,7 +1277,7 @@ gsap.from(".bottom__circleWrap__circle",{
     }
 })
 
-function colorText(element, color, trigger = element, start = "top+=60 70%", duration=1, ease = "none"){
+function colorText(element, color, trigger = element, start = "top+=60 70%", duration=3, ease = "none"){
 
     let childSplit = new SplitText(element, {
 
@@ -1257,11 +1309,13 @@ function colorText(element, color, trigger = element, start = "top+=60 70%", dur
 
     })
 
+    var numOfLanes = childSplit.lines.length;
+
     childSplit.lines.forEach(element => {
 
         revealTl.to(element,{
 
-            duration: duration,
+            duration: duration/numOfLanes,
 
             backgroundPositionX: "0%",
 
@@ -1308,6 +1362,8 @@ class Point{
 
         this.lines = lines;
 
+        this.getter = gsap.getProperty(this.element);
+
     } 
 
     move(newX, newY){
@@ -1336,6 +1392,34 @@ class Point{
 
     }
 
+    updateLines(cords){
+
+        var newLineString;
+
+        this.lines.forEach(line => {
+
+            if(line.startX == this.x && line.startY == this.y){
+
+                newLineString = line.updateStart(cords[0], cords[1]);
+
+            } else {
+
+                newLineString = line.updateEnd(cords[0], cords[1]);
+
+            }
+
+            line.renderUpdate(newLineString);
+
+        })
+
+        
+
+        this.x = cords[0];   
+
+        this.y = cords[1];
+
+    }
+
     async render(coords, time, interval){
 
         let numberOfPoints = time/interval;
@@ -1354,7 +1438,69 @@ class Point{
 
     }
 
-    
+    renderBetter(cords, duration=1, ease="none", delay=0){
+
+        var renderTl = gsap.timeline({});
+
+        renderTl.to(this.element,{
+
+            cx: cords[0],
+
+            cy: cords[1],
+
+            ease: ease,
+
+            duration: duration,
+
+            delay: delay,
+
+            onUpdate: () => {
+
+                this.updateLines([this.getter("cx"), this.getter("cy")]);
+
+            },
+
+        },"<");
+
+
+
+        /*
+
+        var newLineString;
+
+        this.lines.forEach(line => {
+
+            if(line.startX == this.x && line.startY == this.y){
+
+                newLineString = line.updateStart(cords[0], cords[1]);
+
+            } else {
+
+                newLineString = line.updateEnd(cords[0], cords[1]);
+
+            }
+
+            renderTl.to(line.element,{
+
+                attr:{d:newLineString},
+
+                ease: ease,
+
+                duration: duration,
+
+            },"<")
+
+        })
+
+        this.x = cords[0];
+
+        this.y = cords[1];
+
+        */
+
+        return renderTl;
+
+    }
 
 }
 
@@ -1384,7 +1530,7 @@ class Line{
 
         this.endY = String(y);
 
-        this.update();
+        return (this.update());
 
     }
 
@@ -1394,13 +1540,19 @@ class Line{
 
         this.startY = String(y);
 
-        this.update();
+        return(this.update());
 
     }
 
     update(){
 
-        this.element.attributes.d.nodeValue="M" + this.startX + " " + this.startY + "L" + this.endX + " " + this.endY;
+        return("M" + this.startX + " " + this.startY + "L" + this.endX + " " + this.endY);
+
+    }
+
+    renderUpdate(newCoords){
+
+        this.element.attributes.d.nodeValue = newCoords;
 
     }
 
@@ -1411,6 +1563,16 @@ class Line{
 class Triangle{
 
     animationPoints = [[8, 8], [8,1092], [949, 524]]
+
+    /*
+
+    animationPoints = [[-200,0], [-350,500], [-200, 650],
+
+                       [0,950 ], [50,1100], [500,900],
+
+                       [600,800], [700,700], [900,500],
+
+                       [750,350 ], [500,150], [0,50],]*/
 
     index = 0;
 
@@ -1424,9 +1586,19 @@ class Triangle{
 
         while(true){
 
-            this.index = this.index + 1;
+            
 
             //console.log(this.index);
+
+            this.points[0].renderBetter(this.animationPoints[((this.index+1)%this.animationPoints.length)],3, "power2.inOut", 0);
+
+            this.points[1].renderBetter(this.animationPoints[((this.index + 2)%this.animationPoints.length)],3, "power2.inOut", 0.15);
+
+            this.points[2].renderBetter(this.animationPoints[((this.index + 3)%this.animationPoints.length)],3,"power2.inOut", 0.3);
+
+            this.index = this.index + 1;
+
+            /*
 
             this.points[0].render(this.animationPoints[((this.index + 1)%3)],3000,30);
 
@@ -1434,7 +1606,9 @@ class Triangle{
 
             this.points[2].render(this.animationPoints[((this.index + 3)%3)],3400,30);
 
-            await sleep(8000);
+            */
+
+            await sleep(4000);
 
         }
 
@@ -1464,7 +1638,7 @@ const pointThree = new Point("shape-circle-three", [lineOneThree, lineTwoThree, 
 
 const trg = new Triangle([pointOne, pointTwo, pointThree]);
 
-trg.move();
+
 
 
 
