@@ -1041,9 +1041,25 @@ let smoother = ScrollSmoother.create({
 smoother.paused(true);
 
 
+const burger = document.querySelector(".nav__burger");
+const nav_menu = document.querySelector(".nav__menu");
+let toggle = false;
+burger.addEventListener("click", showMenu);
+
+function showMenu(){
+    burger.classList.toggle("nav__burger-active");
+    nav_menu.classList.toggle("nav__menu-active");
+    gsap.to(smoother, {
+        scrollTop: smoother.offset(".hero", "top top"),
+        duration: 0.3,
+        ease: "inOut",
+    });
+    toggle = !toggle;
+    console.log(toggle);
+    smoother.paused(toggle);
+}
 
 const triangle = document.getElementById("triangle");
-
 if (triangle) {
     addEventListener("resize", (event) => {
         triangle.style.transform = "scale("+window.innerHeight/1080+")";
@@ -1053,11 +1069,18 @@ if (triangle) {
     });
 }
 
+function scrollToWhite(event){
+    event.preventDefault();
+    gsap.to(smoother, {
+        scrollTop: smoother.offset(".white", "top top"),
+        duration: 1.0,
+        ease: "inOut",
+    });
+}
 
 const loaderTl = gsap.timeline({
     onComplete: () => {smoother.paused(false)},
-    duration: 2,
-})
+}).pause()
 loaderTl.from(".hero__content",{
     scale: 0,
     duration: 1.2,
@@ -1080,6 +1103,7 @@ loaderTl.from(".nav",{
     ease: "power1.Out",
 },"<0.7")
 
+window.addEventListener("load", () => {loaderTl.play()})
 
 const whiteTextAnimation = document.querySelector(".white-text-animation")
 
@@ -1097,6 +1121,7 @@ mm.add({
     // context.conditions has a boolean property for each condition defined above indicating if it's matched or not.
     let {isMax1440p, isMin1440p, isTablet, isMobile} = context.conditions;
     if (!isMobile) {
+        /*
         gsap.from(".white__secondText",{
             y: 100,
             ease: "power1.In",
@@ -1107,6 +1132,7 @@ mm.add({
                 // markers: true,
             }
         });
+        */
     }
     return () => { 
     // optionally return a cleanup function that will be called when none of the conditions match anymore (after having matched)
@@ -1166,20 +1192,21 @@ const textTextAnimation = document.querySelector(".text-text-animation")
 colorText(textTextAnimation, "white");
 
 const textTl = gsap.timeline({
-    duration:10,
+    duration:1,
     scrollTrigger: {
-        trigger: ".text",
-        start: "top center",
-        end: "top top",
-        scrub: 0.5,
+        trigger: ".text__content__numbers",
+        start: "-400 70%",
+        //end: "top top",
+        //scrub: 0.5,
         //markers: true,
     }
 })
 
 textTl.from(".text__content__numbers",{
-    y: 200,
-    ease: "power1.Out",
-    duration: 10,
+    y: 180,
+    opacity: 0,
+    ease: "power2.Out",
+    duration: 1.2,
 },"<")
 /*
 textTl.from(".text__content",{
@@ -1193,7 +1220,7 @@ gsap.from(".bottom__circleWrap__circle",{
     duration: 1.2,
     scrollTrigger: {
         trigger: ".bottom__content__headline",
-        start: "top bottom",
+        start: "-250 bottom",
         // markers: true,
     }
 })
@@ -1259,6 +1286,185 @@ textsToAnimate.forEach(textToAnimate => {
     colorText(textToAnimate, "iris");
 
 });*/
+
+
+function sleep(ms) {
+
+    return new Promise(resolve => setTimeout(resolve, ms));
+
+}
+
+
+
+class Point{
+
+    constructor(elementId, lines) {
+
+        this.element = document.getElementById(elementId);
+
+        this.x = Number(this.element.attributes.cx.value);
+
+        this.y = Number(this.element.attributes.cy.value);
+
+        this.lines = lines;
+
+    } 
+
+    move(newX, newY){
+
+        this.element.setAttribute("cx", newX);
+
+        this.element.setAttribute("cy", newY);
+
+        this.lines.forEach(line => {
+
+            if(line.startX == this.x && line.startY == this.y){
+
+                line.updateStart(newX, newY);
+
+            } else {
+
+                line.updateEnd(newX, newY);
+
+            }
+
+        });
+
+        this.x = newX;
+
+        this.y = newY;
+
+    }
+
+    async render(coords, time, interval){
+
+        let numberOfPoints = time/interval;
+
+        let changeX = (coords[0] - this.x)/numberOfPoints;
+
+        let changeY = (coords[1] - this.y)/numberOfPoints;        
+
+        for (let i = 0; i < numberOfPoints; i++) {
+
+            this.move(this.x + changeX, this.y + changeY);
+
+            await sleep(interval);
+
+        }
+
+    }
+
+    
+
+}
+
+
+
+class Line{
+
+    constructor(elementId) {
+
+        this.element = document.getElementById(elementId);
+
+        var tmp = this.element.attributes.d.nodeValue.slice(1).split("L")
+
+        this.startX = tmp[0].split(" ")[0];
+
+        this.startY = tmp[0].split(" ")[1];
+
+        this.endX = tmp[1].split(" ")[0];
+
+        this.endY = tmp[1].split(" ")[1];
+
+    }
+
+    updateEnd(x,y){
+
+        this.endX = String(x);
+
+        this.endY = String(y);
+
+        this.update();
+
+    }
+
+    updateStart(x,y){
+
+        this.startX = String(x);
+
+        this.startY = String(y);
+
+        this.update();
+
+    }
+
+    update(){
+
+        this.element.attributes.d.nodeValue="M" + this.startX + " " + this.startY + "L" + this.endX + " " + this.endY;
+
+    }
+
+}
+
+
+
+class Triangle{
+
+    animationPoints = [[8, 8], [8,1092], [949, 524]]
+
+    index = 0;
+
+    constructor(points) {
+
+        this.points = points;
+
+    }
+
+    async move(){
+
+        while(true){
+
+            this.index = this.index + 1;
+
+            //console.log(this.index);
+
+            this.points[0].render(this.animationPoints[((this.index + 1)%3)],3000,30);
+
+            this.points[1].render(this.animationPoints[((this.index + 2)%3)],4000,30);
+
+            this.points[2].render(this.animationPoints[((this.index + 3)%3)],3400,30);
+
+            await sleep(8000);
+
+        }
+
+    }
+
+}
+
+
+
+const lineOneTwo = new Line("shape-circle-line-onetwo");
+
+const lineOneThree = new Line("shape-circle-line-onethree");
+
+const lineOneCenter = new Line("shape-circle-line-onecenter");
+
+const lineTwoThree = new Line("shape-circle-line-twothree");
+
+const lineTwoCenter = new Line("shape-circle-line-twocenter");
+
+const lineThreeCenter = new Line("shape-circle-line-threecenter");
+
+const pointOne = new Point("shape-circle-one", [lineOneTwo, lineOneThree, lineOneCenter]);
+
+const pointTwo = new Point("shape-circle-two", [lineOneTwo, lineTwoThree, lineTwoCenter]);
+
+const pointThree = new Point("shape-circle-three", [lineOneThree, lineTwoThree, lineThreeCenter]);
+
+const trg = new Triangle([pointOne, pointTwo, pointThree]);
+
+trg.move();
 
 
 
