@@ -1054,228 +1054,294 @@ function showMenu(){
         element.classList.toggle("nav__menu__burger-active");
     });
     gsap.to(smoother, {
-        scrollTop: smoother.offset(".hero", "top top"),
+        scrollTop: smoother.offset("body", "top top"),
         duration: 0.3,
         ease: "inOut",
     });
     toggle = !toggle;
     smoother.paused(toggle);
 }
-
-const triangle = document.getElementById("triangle");
-if (triangle) {
-    addEventListener("resize", (event) => {
-        triangle.style.transform = "scale("+window.innerHeight/1080+")";
-    });
-    addEventListener("load", (event) => {
-        triangle.style.transform = "scale("+window.innerHeight/1080+")";
-    });
-}
-
-const learnMore = document.querySelector(".hero__content__circle__ring__text__action");
-if (learnMore){
-    learnMore.addEventListener("click", (event) => {
-        event.preventDefault();
-        gsap.to(smoother, {
-            scrollTop: smoother.offset(".white", "top top"),
-            duration: 1.0,
-            ease: "inOut",
+if(document.querySelector(".hero")){
+    const triangle = document.getElementById("triangle");
+    if (triangle) {
+        addEventListener("resize", (event) => {
+            triangle.style.transform = "scale("+window.innerHeight/1080+")";
         });
+        addEventListener("load", (event) => {
+            triangle.style.transform = "scale("+window.innerHeight/1080+")";
+        });
+    }
+
+    const learnMore = document.querySelector(".hero__content__circle__ring__text__action");
+    if (learnMore){
+        learnMore.addEventListener("click", (event) => {
+            event.preventDefault();
+            gsap.to(smoother, {
+                scrollTop: smoother.offset(".white", "top top"),
+                duration: 1.0,
+                ease: "inOut",
+            });
+        });
+    }
+
+
+    const loaderTl = gsap.timeline({
+        onComplete: () => {smoother.paused(false); trg.move(); gsap.set(".hero__shape", {overflow: "hidden"})},
+    }).pause()
+    loaderTl.to(".hero__content__circle",{
+        scale: 1,
+        duration: 1.2,
+        ease: "power1.Out",
+    })
+    loaderTl.to(".hero__shape",{
+        scale: 1,
+        duration: 1.2,
+        ease: "power1.0ut",
+    },"<")
+    loaderTl.to(".hero__content__circle__ring",{
+        scale: 1,
+        duration: 0.9,
+        ease: "power1.Out",
+    }, "<0.2")
+
+    loaderTl.to(".nav",{
+        y: 0,
+        duration: 1.3,
+        ease: "power1.Out",
+    },"<0.7")
+
+    loaderTl.to(".hero__content__circle__ring__text",{
+        transform: "scale(1) translate(-50%, -50%)",
+        duration: 1.2,
+        ease: "power1.0ut",
+    },"0")
+
+    window.addEventListener("load", () => {loaderTl.play()})
+}
+if(document.querySelector(".white")){
+    const whiteTextAnimation = document.querySelector(".white-text-animation")
+    if (whiteTextAnimation){
+        window.addEventListener("load", () => {colorText(whiteTextAnimation, "iris", ".hero", "bottom center",3)});
+    }
+
+    const firstImages = document.querySelectorAll(".imOne");
+    const secondImages = document.querySelectorAll(".imTwo");
+    const imOneTl = gsap.timeline({
+            repeat: -1,
+    })
+    //------- First loop of images -------
+    {
+        imOneTl.to(firstImages[0],{
+            opacity: 1,
+            duration: 0.5,
+        },"0")
+        imOneTl.to(firstImages[firstImages.length-1],{
+            opacity: 0,
+            duration: 0.5
+        },"<")
+        imOneTl.to(firstImages[0],{
+            opacity: 0,
+            duration: 0.5,
+        },">1")
+        for(let i = 1; i<firstImages.length-1;i++){
+            imOneTl.to(firstImages[i], {
+                opacity: 1,
+                duration: 0.5,
+            },">-0.5")
+            imOneTl.to(firstImages[i],{
+                opacity: 0,
+                duration: 0.5,
+            },">1")
+        }
+        imOneTl.to(firstImages[firstImages.length-1], {
+            opacity: 1,
+            duration: 0.5,
+        },">-0.5")
+        imOneTl.to(firstImages[firstImages.length-1],{duration: 1},">");
+    }
+    //------- Second     loop of images -------
+    {
+        const imTwoTl = gsap.timeline({
+            repeat: -1,
+        })
+        imTwoTl.to(secondImages[0],{
+            opacity: 1,
+            duration: 0.5,
+        },"0")
+        imTwoTl.to(secondImages[secondImages.length-1],{
+            opacity: 0,
+            duration: 0.5
+        },"<")
+        imTwoTl.to(secondImages[0],{
+            opacity: 0,
+            duration: 0.5,
+        },">1")
+        for(let i = 1; i<secondImages.length-1;i++){
+            imTwoTl.to(secondImages[i], {
+                opacity: 1,
+                duration: 0.5,
+            },">-0.5")
+            imTwoTl.to(secondImages[i],{
+                opacity: 0,
+                duration: 0.5,
+            },">1")
+        }
+        imTwoTl.to(secondImages[secondImages.length-1], {
+            opacity: 1,
+            duration: 0.5,
+        },">-0.5")
+        imTwoTl.to(secondImages[secondImages.length-1],{duration: 1},">");
+    }
+
+
+    let mm = gsap.matchMedia();
+
+    mm.add({
+    // set up any number of arbitrarily-named conditions. The function below will be called when ANY of them match.
+        isMax1440p: '(min-width: 953px) and (max-width: 1500px)',
+        isMin1440p: '(min-width: 1501px)',
+        isTablet: '(min-width: 768px) and (max-width: 952px)',
+        isMobile: '(max-width: 952px)',
+    }, (context) => {
+        
+        
+        // context.conditions has a boolean property for each condition defined above indicating if it's matched or not.
+        let {isMax1440p, isMin1440p, isTablet, isMobile} = context.conditions;
+        if (!isMobile) {
+            const whiteOutTl = gsap.timeline({
+                scrollTrigger: {
+                    trigger: ".text",
+                    start: "top center",
+                    end: "top -40%",
+                    scrub: 0.3,
+                    //markers: true,
+                }
+            })
+            whiteOutTl.to(".white__wrap",{
+                scale: 0.94,
+                ease: "power1.Out",    
+            })
+            whiteOutTl.to(".white__wrap",{
+                y: -500,
+                ease: "power1.Out", 
+            },"<")
+        } else {
+            const whiteOutTl = gsap.timeline({
+                scrollTrigger: {
+                    trigger: ".text",
+                    start: "top 75%",
+                    end: "top -40%",
+                    scrub: 0.3,
+                    //markers: true,
+                }
+            })
+            whiteOutTl.to(".white__wrap",{
+                scale: 0.94,
+                ease: "power1.Out",    
+            })
+            whiteOutTl.to(".white__wrap",{
+                y: -200,
+                ease: "power1.Out", 
+            },"<")
+        }
+        return () => { 
+        // optionally return a cleanup function that will be called when none of the conditions match anymore (after having matched)
+        // it'll automatically call context.revert() - do NOT do that here . Only put custom cleanup code here.
+        }
+    }); 
+
+    const whiteInTl = gsap.timeline({
+        duration: 10,
+        scrollTrigger: {
+            trigger: ".hero",
+            start: "bottom bottom",
+            end: "bottom 10%",
+            scrub: 0.3,
+            //markers: true,
+        }
+    })
+
+    whiteInTl.to(".hero__bg__img",{
+        duration: 10,
+        scale: 1.15,
+        ease: "power1.Out",
+    },"<")
+
+    whiteInTl.from(".white__wrap",{
+        duration:9,
+        scale: 0.80,
+        ease: "power1.Out",
+    },"<1")
+}
+if(document.querySelector(".text")){
+    const textTextAnimation = document.querySelector(".text-text-animation")
+    window.addEventListener("load", () => {colorText(textTextAnimation, "white")});
+
+    const textTl = gsap.timeline({
+        duration:1,
+        scrollTrigger: {
+            trigger: ".text__content__numbers",
+            start: "-400 70%",
+            //end: "top top",
+            //scrub: 0.5,
+            //markers: true,
+        }
+    })
+
+    textTl.from(".text__content__numbers",{
+        y: 180,
+        opacity: 0,
+        ease: "power2.Out",
+        duration: 1.2,
+    },"<")
+    /*
+    textTl.from(".text__content",{
+        y: 150,
+        ease: "power1.InOut",
+        duration: 8,
+    },"<2")*/
+}
+if(document.querySelector(".bottom")){
+    gsap.from(".bottom__circleWrap__circle",{
+        scale: 0.4,
+        ease: "power2.In",
+        duration: 1.2,
+        scrollTrigger: {
+            trigger: ".bottom__content__headline",
+            start: "-250 bottom",
+            // markers: true,
+        }
+    })
+}
+if(document.querySelector(".contact")){
+    
+    const contactContentAnimation = document.querySelector(".contact__content-animation");
+    const loaderTl = gsap.timeline({
+        onComplete: () => {smoother.paused(false);colorText(contactContentAnimation, "white", contactContentAnimation, "top+=60 bottom", 1.5,"none");},
     });
-}
 
-
-const loaderTl = gsap.timeline({
-    onComplete: () => {smoother.paused(false); trg.move(); gsap.set(".hero__shape", {overflow: "hidden"})},
-}).pause()
-loaderTl.to(".hero__content__circle",{
-    scale: 1,
-    duration: 1.2,
-    ease: "power1.Out",
-})
-loaderTl.to(".hero__shape",{
-    scale: 1,
-    duration: 1.2,
-    ease: "power1.0ut",
-},"<")
-loaderTl.to(".hero__content__circle__ring",{
-    scale: 1,
-    duration: 0.9,
-    ease: "power1.Out",
-}, "<0.2")
-
-loaderTl.to(".nav",{
-    y: 0,
-    duration: 1.3,
-    ease: "power1.Out",
-},"<0.7")
-
-loaderTl.to(".hero__content__circle__ring__text",{
-    transform: "scale(1) translate(-50%, -50%)",
-    duration: 1.2,
-    ease: "power1.0ut",
-},"0")
-
-window.addEventListener("load", () => {loaderTl.play()})
-
-const whiteTextAnimation = document.querySelector(".white-text-animation")
-if (whiteTextAnimation){
-    window.addEventListener("load", () => {colorText(whiteTextAnimation, "iris", ".hero", "bottom center",3)});
-}
-
-const firstImages = document.querySelectorAll(".imOne");
-const secondImages = document.querySelectorAll(".imTwo");
-const imOneTl = gsap.timeline({
-        //duration: 6,
-        repeat: -1,
-})
-firstImages.forEach(element => {
-    imOneTl.to(element, {
+    loaderTl.to(".contact__content",{
         opacity: 1,
-        duration: 0.5,
-    },">-0.5")
-    imOneTl.to(element,{
-        opacity: 0,
-        duration: 0.5,
-    },">1")
-});
-const imTwoTl = gsap.timeline({
-    //duration: 6,
-    repeat: -1,
-})
-secondImages.forEach(element => {
-    imTwoTl.to(element, {
+        scale: 1,
+        duration: 1,
+        ease: "power1.InOut",
+    })
+
+    loaderTl.to(".contact__map",{
         opacity: 1,
-        duration: 0.5,
-    },">-0.5")
-    imTwoTl.to(element,{
-        opacity: 0,
-        duration: 0.5,
-    },">1")
-});
+        scale: 1,
+        duration: 1,
+        ease: "power1.InOut",
+    },"<")
 
-let mm = gsap.matchMedia();
-
-mm.add({
-  // set up any number of arbitrarily-named conditions. The function below will be called when ANY of them match.
-    isMax1440p: '(min-width: 953px) and (max-width: 1500px)',
-    isMin1440p: '(min-width: 1501px)',
-    isTablet: '(min-width: 768px) and (max-width: 952px)',
-    isMobile: '(max-width: 952px)',
-}, (context) => {
-    
-    
-    // context.conditions has a boolean property for each condition defined above indicating if it's matched or not.
-    let {isMax1440p, isMin1440p, isTablet, isMobile} = context.conditions;
-    if (!isMobile) {
-        const whiteOutTl = gsap.timeline({
-            scrollTrigger: {
-                trigger: ".text",
-                start: "top center",
-                end: "top -40%",
-                scrub: 0.3,
-                //markers: true,
-            }
-        })
-        whiteOutTl.to(".white__wrap",{
-            scale: 0.94,
-            ease: "power1.Out",    
-        })
-        whiteOutTl.to(".white__wrap",{
-            y: -500,
-            ease: "power1.Out", 
-        },"<")
-    } else {
-        const whiteOutTl = gsap.timeline({
-            scrollTrigger: {
-                trigger: ".text",
-                start: "top 75%",
-                end: "top -40%",
-                scrub: 0.3,
-                markers: true,
-            }
-        })
-        whiteOutTl.to(".white__wrap",{
-            scale: 0.94,
-            ease: "power1.Out",    
-        })
-        whiteOutTl.to(".white__wrap",{
-            y: -200,
-            ease: "power1.Out", 
-        },"<")
-    }
-    return () => { 
-    // optionally return a cleanup function that will be called when none of the conditions match anymore (after having matched)
-    // it'll automatically call context.revert() - do NOT do that here . Only put custom cleanup code here.
-    }
-}); 
-
-const whiteInTl = gsap.timeline({
-    duration: 10,
-    scrollTrigger: {
-        trigger: ".hero",
-        start: "bottom bottom",
-        end: "bottom 10%",
-        scrub: 0.3,
-        //markers: true,
-    }
-})
-
-whiteInTl.to(".hero__bg__img",{
-    duration: 10,
-    scale: 1.15,
-    ease: "power1.Out",
-},"<")
-
-whiteInTl.from(".white__wrap",{
-    duration:9,
-    scale: 0.80,
-    ease: "power1.Out",
-},"<1")
-//-------------------------------------------
-
-//-----------------------------------------
+    loaderTl.to(".nav",{
+        y: 0,
+        duration: 1.3,
+        ease: "power1.Out",
+    },"<0.7")
 
 
-
-
-
-const textTextAnimation = document.querySelector(".text-text-animation")
-window.addEventListener("load", () => {colorText(textTextAnimation, "white")});
-
-const textTl = gsap.timeline({
-    duration:1,
-    scrollTrigger: {
-        trigger: ".text__content__numbers",
-        start: "-400 70%",
-        //end: "top top",
-        //scrub: 0.5,
-        //markers: true,
-    }
-})
-
-textTl.from(".text__content__numbers",{
-    y: 180,
-    opacity: 0,
-    ease: "power2.Out",
-    duration: 1.2,
-},"<")
-/*
-textTl.from(".text__content",{
-    y: 150,
-    ease: "power1.InOut",
-    duration: 8,
-},"<2")*/
-gsap.from(".bottom__circleWrap__circle",{
-    scale: 0.4,
-    ease: "power2.In",
-    duration: 1.2,
-    scrollTrigger: {
-        trigger: ".bottom__content__headline",
-        start: "-250 bottom",
-        // markers: true,
-    }
-})
+}
 
 function colorText(element, color, trigger = element, start = "top+=60 70%", duration=3, ease = "none"){
 
@@ -1618,27 +1684,43 @@ class Triangle{
 
 
 
-const lineOneTwo = new Line("shape-circle-line-onetwo");
-
-const lineOneThree = new Line("shape-circle-line-onethree");
-
-const lineOneCenter = new Line("shape-circle-line-onecenter");
-
-const lineTwoThree = new Line("shape-circle-line-twothree");
-
-const lineTwoCenter = new Line("shape-circle-line-twocenter");
-
-const lineThreeCenter = new Line("shape-circle-line-threecenter");
-
-const pointOne = new Point("shape-circle-one", [lineOneTwo, lineOneThree, lineOneCenter]);
-
-const pointTwo = new Point("shape-circle-two", [lineOneTwo, lineTwoThree, lineTwoCenter]);
-
-const pointThree = new Point("shape-circle-three", [lineOneThree, lineTwoThree, lineThreeCenter]);
-
-const trg = new Triangle([pointOne, pointTwo, pointThree]);
 
 
+function makeTriangle(){
+
+    if (document.querySelector(".hero")){
+
+        let lineOneTwo = new Line("shape-circle-line-onetwo");
+
+        let lineOneThree = new Line("shape-circle-line-onethree");
+
+        let lineOneCenter = new Line("shape-circle-line-onecenter");
+
+        let lineTwoThree = new Line("shape-circle-line-twothree");
+
+        let lineTwoCenter = new Line("shape-circle-line-twocenter");
+
+        let lineThreeCenter = new Line("shape-circle-line-threecenter");
+
+        let pointOne = new Point("shape-circle-one", [lineOneTwo, lineOneThree, lineOneCenter]);
+
+        let pointTwo = new Point("shape-circle-two", [lineOneTwo, lineTwoThree, lineTwoCenter]);
+
+        let pointThree = new Point("shape-circle-three", [lineOneThree, lineTwoThree, lineThreeCenter]);
+
+        let trg = new Triangle([pointOne, pointTwo, pointThree]);
+
+        return trg;
+
+    }
+
+    return null;
+
+}
+
+
+
+const trg = makeTriangle();
 
 
 
