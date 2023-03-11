@@ -1352,6 +1352,7 @@ if(document.querySelector(".contact")){
       window.initMap = initMap;
 }
 
+
 function colorText(element, color, trigger = element, start = "top+=60 70%", duration=3, ease = "none"){
 
     let childSplit = new SplitText(element, {
