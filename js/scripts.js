@@ -1364,8 +1364,9 @@ if(document.querySelector(".contact")){
   window.initMap = initMap;
 }
 if(document.querySelector(".aboutus")){
+    const aboutus_text_animation = document.querySelector(".aboutus__text-animation");
     const loaderTl = gsap.timeline({
-        onComplete: () => {smoother.paused(false);},
+        onComplete: () => {smoother.paused(false);colorText(aboutus_text_animation, "white", aboutus_text_animation, "top+=60 bottom", 1.5,"none");},
     });
 
     loaderTl.to(".container",{
@@ -1382,6 +1383,7 @@ if(document.querySelector(".aboutus")){
     },"<0.7")
 
 }
+
 
 function colorText(element, color, trigger = element, start = "top+=60 70%", duration=3, ease = "none"){
 
