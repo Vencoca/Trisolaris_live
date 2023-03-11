@@ -1320,19 +1320,12 @@ if(document.querySelector(".contact")){
         onComplete: () => {smoother.paused(false);colorText(contactContentAnimation, "white", contactContentAnimation, "top+=60 bottom", 1.5,"none");},
     });
 
-    loaderTl.to(".contact__content",{
+    loaderTl.to(".container",{
+        y: 0,
         opacity: 1,
-        scale: 1,
-        duration: 1,
+        duration: 2,
         ease: "power1.InOut",
     })
-
-    loaderTl.to(".contact__map",{
-        opacity: 1,
-        scale: 1,
-        duration: 1,
-        ease: "power1.InOut",
-    },"<")
 
     loaderTl.to(".nav",{
         y: 0,
@@ -1341,6 +1334,22 @@ if(document.querySelector(".contact")){
     },"<0.7")
 
 
+    // Initialize and add the map
+    function initMap() {
+    const trisolaris_adress = { lat: 47.186549, lng: 8.478866 };
+    const map = new google.maps.Map(document.getElementById("map"), {
+      zoom: 16,
+      center: trisolaris_adress,
+      mapId: 'ef45da2f5c6d7d69',
+    });
+    const marker = new google.maps.Marker({
+      position: trisolaris_adress,
+      map: map,
+    });
+  }
+  
+  window.initMap = initMap;
+      window.initMap = initMap;
 }
 
 function colorText(element, color, trigger = element, start = "top+=60 70%", duration=3, ease = "none"){
