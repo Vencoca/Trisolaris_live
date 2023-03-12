@@ -1062,15 +1062,6 @@ function showMenu(){
     smoother.paused(toggle);
 }
 if(document.querySelector(".hero")){
-    const triangle = document.getElementById("triangle");
-    if (triangle) {
-        addEventListener("resize", (event) => {
-            triangle.style.transform = "scale("+window.innerHeight/1080+")";
-        });
-        addEventListener("load", (event) => {
-            triangle.style.transform = "scale("+window.innerHeight/1080+")";
-        });
-    }
 
     const learnMore = document.querySelector(".hero__content__circle__ring__text__action");
     if (learnMore){
@@ -1086,7 +1077,7 @@ if(document.querySelector(".hero")){
 
 
     const loaderTl = gsap.timeline({
-        onComplete: () => {smoother.paused(false); trg.move(); gsap.set(".hero__shape", {overflow: "hidden"})},
+        onComplete: () => {smoother.paused(false); trg.move();},
     }).pause()
     loaderTl.to(".hero__content__circle",{
         scale: 1,
@@ -1474,11 +1465,77 @@ class Point{
 
     } 
 
+
+
+    dragElement(el){
+
+        console.log("Setting the mousedown for element " + el);
+
+        var counter = 0;
+
+        el.element.onclick = () => {
+
+            counter = counter + 1;
+
+            document.onmousemove = (e) => {
+
+                el.move(e.clientX - el.element.parentElement.getBoundingClientRect().x, e.clientY - el.element.parentElement.getBoundingClientRect().y);
+
+            }
+
+            if(counter >= 2){
+
+                counter = 0;
+
+                document.onclick = (e) => {
+
+                    console.log("[" +  Math.floor(el.x) + "," + Math.floor(el.y)+ "]")
+
+                    document.onclick = null;
+
+                    document.onmousemove = null;
+
+                }
+
+            }
+
+        }
+
+        /*
+
+        el.element.onmousedown = dragMouseDown();
+
+        function dragMouseDown(event){
+
+            document.onmousemove = (e) => {
+
+                el.move(e.clientX, e.clientY);
+
+            }
+
+            document.onmouseup = (e) => {
+
+                document.onmouseup = null;
+
+                document.onmousemove = null;
+
+            }
+
+        }*/
+
+    }
+
+
+
     move(newX, newY){
 
         this.element.setAttribute("cx", newX);
 
         this.element.setAttribute("cy", newY);
+
+        this.updateLines([newX, newY]);
+
+        /*
 
         this.lines.forEach(line => {
 
@@ -1496,7 +1553,7 @@ class Point{
 
         this.x = newX;
 
-        this.y = newY;
+        this.y = newY;*/
 
     }
 
@@ -1690,9 +1747,29 @@ class Triangle{
 
     }
 
+
+
+    drag_init(){
+
+        this.points.forEach(point => {
+
+            point.dragElement(point);
+
+            point.element.style = "cursor:pointer; z-index:99999;";
+
+        })
+
+        console.log("Done! - Drag activated");
+
+    }
+
+
+
+
+
     async move(){
 
-        while(true){
+        while(false){
 
             
 
