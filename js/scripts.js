@@ -1315,7 +1315,7 @@ if(document.querySelector(".contact")){
     loaderTl.to(".container",{
         y: 0,
         duration: 1,
-        ease: "power2.Out",
+        ease: "power3.Out",
     })
 
     loaderTl.to(".container",{
@@ -1370,10 +1370,15 @@ if(document.querySelector(".aboutus")){
 
     loaderTl.to(".container",{
         y: 0,
-        opacity: 1,
-        duration: 2,
-        ease: "power1.InOut",
+        duration: 1,
+        ease: "power3.Out",
     })
+
+    loaderTl.to(".container",{
+      opacity: 1,
+      duration: 1,
+      ease: "power4.In",
+  },"<")
     /*
     loaderTl.to(".nav",{
         y: 0,
