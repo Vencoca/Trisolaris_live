@@ -1310,20 +1310,27 @@ if(document.querySelector(".contact")){
     const loaderTl = gsap.timeline({
         onComplete: () => {smoother.paused(false);colorText(contactContentAnimation, "white", contactContentAnimation, "top+=60 bottom", 1.5,"none");},
     });
+    gsap.set(".nav", {y:0});
 
     loaderTl.to(".container",{
         y: 0,
-        opacity: 1,
-        duration: 2,
-        ease: "power1.InOut",
+        duration: 1,
+        ease: "power2.Out",
     })
 
+    loaderTl.to(".container",{
+      opacity: 1,
+      duration: 1,
+      ease: "power4.In",
+  },"<")
+    
+    /*
     loaderTl.to(".nav",{
         y: 0,
         duration: 1.3,
         ease: "power1.Out",
     },"<0.7")
-
+    */
 
     // Initialize and add the map
     function initMap() {
@@ -1359,6 +1366,7 @@ if(document.querySelector(".aboutus")){
     const loaderTl = gsap.timeline({
         onComplete: () => {smoother.paused(false);colorText(aboutus_text_animation, "white", aboutus_text_animation, "top+=60 bottom", 1.5,"none");},
     });
+    gsap.set(".nav", {y:0});
 
     loaderTl.to(".container",{
         y: 0,
@@ -1366,13 +1374,13 @@ if(document.querySelector(".aboutus")){
         duration: 2,
         ease: "power1.InOut",
     })
-
+    /*
     loaderTl.to(".nav",{
         y: 0,
         duration: 1.3,
         ease: "power1.Out",
     },"<0.7")
-
+    */
 }
 
 
@@ -1451,7 +1459,7 @@ function sleep(ms) {
 
 class Point{
 
-    constructor(elementId, lines) {
+    constructor(elementId, lines, rect) {
 
         this.element = document.getElementById(elementId);
 
@@ -1461,9 +1469,39 @@ class Point{
 
         this.lines = lines;
 
+        this.rect = rect;
+
         this.getter = gsap.getProperty(this.element);
 
-    } 
+        this.offsetX = 0;
+
+        this.offsetY = 0;
+
+    }
+
+    
+
+    addOffset(el){
+
+        el.rect.addEventListener("mouseenter", (event) => {
+
+            this.offsetX = event.clientX - el.x - Number(this.rect.attributes.r.value);
+
+            console.log(this.offsetX);
+
+        });
+
+    }
+
+
+
+    updateRect(newX, newY){
+
+        this.rect.setAttribute("cx", newX);
+
+        this.rect.setAttribute("cy", newY);
+
+    }
 
 
 
@@ -1479,7 +1517,13 @@ class Point{
 
             document.onmousemove = (e) => {
 
-                el.move(e.clientX - el.element.parentElement.getBoundingClientRect().x, e.clientY - el.element.parentElement.getBoundingClientRect().y);
+                let newX = e.clientX - el.element.parentElement.getBoundingClientRect().x;
+
+                let newY = e.clientY - el.element.parentElement.getBoundingClientRect().y
+
+                el.move(newX, newY);
+
+                el.updateRect(newX,newY)
 
             }
 
@@ -1501,28 +1545,6 @@ class Point{
 
         }
 
-        /*
-
-        el.element.onmousedown = dragMouseDown();
-
-        function dragMouseDown(event){
-
-            document.onmousemove = (e) => {
-
-                el.move(e.clientX, e.clientY);
-
-            }
-
-            document.onmouseup = (e) => {
-
-                document.onmouseup = null;
-
-                document.onmousemove = null;
-
-            }
-
-        }*/
-
     }
 
 
@@ -1535,27 +1557,11 @@ class Point{
 
         this.updateLines([newX, newY]);
 
-        /*
-
-        this.lines.forEach(line => {
-
-            if(line.startX == this.x && line.startY == this.y){
-
-                line.updateStart(newX, newY);
-
-            } else {
-
-                line.updateEnd(newX, newY);
-
-            }
-
-        });
-
-        this.x = newX;
-
-        this.y = newY;*/
+        this.updateRect(newX, newY);
 
     }
+
+
 
     updateLines(cords){
 
@@ -1622,6 +1628,8 @@ class Point{
             onUpdate: () => {
 
                 this.updateLines([this.getter("cx"), this.getter("cy")]);
+
+                this.move(this.getter("cx"), this.getter("cy"))
 
             },
 
@@ -1821,11 +1829,11 @@ function makeTriangle(){
 
         let lineThreeCenter = new Line("shape-circle-line-threecenter");
 
-        let pointOne = new Point("shape-circle-one", [lineOneTwo, lineOneThree, lineOneCenter]);
+        let pointOne = new Point("shape-circle-one", [lineOneTwo, lineOneThree, lineOneCenter], document.getElementById("shape-rect-one"));
 
-        let pointTwo = new Point("shape-circle-two", [lineOneTwo, lineTwoThree, lineTwoCenter]);
+        let pointTwo = new Point("shape-circle-two", [lineOneTwo, lineTwoThree, lineTwoCenter], document.getElementById("shape-rect-two"));
 
-        let pointThree = new Point("shape-circle-three", [lineOneThree, lineTwoThree, lineThreeCenter]);
+        let pointThree = new Point("shape-circle-three", [lineOneThree, lineTwoThree, lineThreeCenter], document.getElementById("shape-rect-three"));
 
         let trg = new Triangle([pointOne, pointTwo, pointThree]);
 
