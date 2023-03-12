@@ -1351,6 +1351,11 @@ if(document.querySelector(".contact")){
       center: trisolaris_adress,
       mapId: 'ef45da2f5c6d7d69',
       controlSize: controlSize,
+      zoomControl: true,
+      mapTypeControl: false,
+      streetViewControl: false,
+      rotateControl: false,
+      fullscreenControl: false
     });
 
     const marker = new google.maps.Marker({
@@ -1490,6 +1495,14 @@ class Point{
 
         el.rect.addEventListener("mouseenter", (event) => {
 
+            let newX = event.clientX - el.element.parentElement.getBoundingClientRect().x - el.x + Number(this.rect.attributes.r.value);
+
+            let newY = event.clientY - el.element.parentElement.getBoundingClientRect().y;
+
+
+
+            console.log(newX + " " + el.x + " " + Number(this.rect.attributes.r.value))
+
             this.offsetX = event.clientX - el.x - Number(this.rect.attributes.r.value);
 
             console.log(this.offsetX);
@@ -1524,7 +1537,7 @@ class Point{
 
                 let newX = e.clientX - el.element.parentElement.getBoundingClientRect().x;
 
-                let newY = e.clientY - el.element.parentElement.getBoundingClientRect().y
+                let newY = e.clientY - el.element.parentElement.getBoundingClientRect().y;
 
                 el.move(newX, newY);
 
