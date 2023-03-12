@@ -1341,9 +1341,9 @@ if(document.querySelector(".contact")){
     } else if (window.innerWidth > 1280 ){
       controlSize = 30;
     } else if(window.innerWidth > 952){
-      controlSize = 28;
+      controlSize = 24;
     } else {
-      controlSize = 20;
+      controlSize = 16;
     }
 
     const mapa = new google.maps.Map(document.getElementById("map"), {
