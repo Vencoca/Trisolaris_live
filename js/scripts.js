@@ -1493,19 +1493,61 @@ class Point{
 
     addOffset(el){
 
+        let circleXTo = gsap.quickTo(el.element, "cx", {duration: 0.5, ease: "power3"});
+
+        let borderXTo = gsap.quickTo(el.rect, "cx", {duration: 0.5, ease: "power3"});
+
+        let circleYTo = gsap.quickTo(el.element, "cy", {duration: 0.5, ease: "power3"});
+
+        let borderYTo = gsap.quickTo(el.rect, "cy", {duration: 0.5, ease: "power3"});
+
+
+
         el.rect.addEventListener("mouseenter", (event) => {
 
-            let newX = event.clientX - el.element.parentElement.getBoundingClientRect().x - el.x + Number(this.rect.attributes.r.value);
+            let forceX = -20;
 
-            let newY = event.clientY - el.element.parentElement.getBoundingClientRect().y;
+            let r = Number(this.rect.attributes.r.value);
+
+            let vectX = ((event.clientX - el.element.parentElement.getBoundingClientRect().x + 2*r) - this.getter("cx"));
 
 
 
-            console.log(newX + " " + el.x + " " + Number(this.rect.attributes.r.value))
+            this.offsetX = forceX * (r/vectX);
+
+            console.log(vectX);
+
+            /*
+
+            let newX = (event.clientX - el.element.parentElement.getBoundingClientRect().x - (el.x+el.offsetX));
+
+            newX = -20*(1+Number(this.rect.attributes.r.value)/newX)
+
+            //if (newX > 0 ? newX-=60 : newX+=60);
+
+            let newY = (event.clientY - el.element.parentElement.getBoundingClientRect().y - el.y);
+
+            newY = 20*(Number(this.rect.attributes.r.value)/newY)
+
+            //if (newY > 0 ? newY-=60 : newY+=60);
+
+            borderXTo(el.x + newX);
+
+            circleXTo(el.x + newX);
+
+            //borderYTo(el.y + newY);
+
+            //circleYTo(el.y + newY);
+
+
+
+            console.log(event.clientX - el.element.parentElement.getBoundingClientRect().x, el.x+el.offsetX)
 
             this.offsetX = event.clientX - el.x - Number(this.rect.attributes.r.value);
 
-            console.log(this.offsetX);
+            //console.log(this.offsetX);
+
+            */
 
         });
 
@@ -1765,6 +1807,18 @@ class Triangle{
 
                        [750,350 ], [500,150], [0,50],]*/
 
+
+
+    //                      1           2           3           4           5           6           7           8           9           10          11         12
+
+    animationPoints1 = [[50, -8],   [-67,205],  [-52,341],  [-58, 456], [-16, 864], [251, 945], [644, 1049], [888,861], [1046, 465], [855,183], [676 -33], [345, -62]]
+
+    animationPoints2 = [[209, 1115], [467,1094], [602,1075], [803, 1004], [907, 731], [984, 404], [843, 134], [600,-70], [241, 32], [-75,282], [1, 682], [57, 956]]
+
+    animationPoints3 = [[1159, 413], [1125,313], [961,32], [668, -66], [347, -62], [201, 78], [51, 366], [-16,682],     [161, 950], [617,966], [829, 774], [1020, 667]]
+
+    
+
     index = 0;
 
     constructor(points) {
@@ -1795,17 +1849,15 @@ class Triangle{
 
     async move(){
 
-        while(false){
-
-            
+        while(true){
 
             //console.log(this.index);
 
-            this.points[0].renderBetter(this.animationPoints[((this.index+1)%this.animationPoints.length)],3, "power2.inOut", 0);
+            this.points[0].renderBetter(this.animationPoints1[((this.index+1)%this.animationPoints1.length)],3, "power2.inOut", 0);
 
-            this.points[1].renderBetter(this.animationPoints[((this.index + 2)%this.animationPoints.length)],3, "power2.inOut", 0.15);
+            this.points[1].renderBetter(this.animationPoints2[((this.index+1)%this.animationPoints2.length)],3, "power2.inOut", 0.15);
 
-            this.points[2].renderBetter(this.animationPoints[((this.index + 3)%this.animationPoints.length)],3,"power2.inOut", 0.3);
+            this.points[2].renderBetter(this.animationPoints3[((this.index+1)%this.animationPoints3.length)],3,"power2.inOut", 0.3);
 
             this.index = this.index + 1;
 
