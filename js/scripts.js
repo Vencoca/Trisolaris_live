@@ -2109,6 +2109,8 @@ class Point{
 
                 sinA = diffY/r;
 
+                console.log(event.clientX, event.offsetX)
+
                 // console.log([cursorX, cursorY], [posX/10*8, posY/10*8], [diffX, diffY], r)
 
                 if(r > Math.sqrt(tmp.offsetX*tmp.offsetX + tmp.offsetY*tmp.offsetY)/200){
