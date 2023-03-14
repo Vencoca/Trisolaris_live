@@ -1979,31 +1979,39 @@ if(false){
     }
 
 
-// let triangleR = 300
+let triangleEl = document.querySelector("#triangle")
 
-// let transformCoeff = 1
+let shapeRectOneEl = document.querySelector("#shape-rect-one")
 
+let triangleR = null;
 
+let transformCoeff = null;
 
-let triangleR = Number(document.querySelector("#shape-rect-one").attributes.r.nodeValue)/1000*document.querySelector("#triangle").clientWidth;
+let cursorOffsetX = null;
 
-let transformCoeff = document.querySelector("#triangle").clientWidth/1000
+if(triangleEl){
 
+    triangleR = Number(shapeRectOneEl.attributes.r.nodeValue)/1000*triangleEl.clientHeight;
 
+    transformCoeff = triangleEl.clientHeight/1000
 
-window.addEventListener("resize", function(){
-
-    triangleR = Number(document.querySelector("#shape-rect-one").attributes.r.nodeValue)/1000*document.querySelector("#triangle").clientWidth;
-
-    transformCoeff = document.querySelector("#triangle").clientWidth/1000
-
-    // console.log(triangleR, transformCoeff)
-
-})
+    cursorOffsetX = (triangleEl.clientWidth-triangleEl.clientHeight)/2
 
 
 
-// console.log(triangleR, transformCoeff)
+    window.addEventListener("resize", function(){
+
+        triangleR = Number(shapeRectOneEl.attributes.r.nodeValue)/1000*triangleEl.clientHeight;
+
+        transformCoeff = triangleEl.clientHeight/1000
+
+        cursorOffsetX = (triangleEl.clientWidth-triangleEl.clientHeight)/2
+
+    })
+
+}
+
+
 
 class Point{
 
@@ -2087,17 +2095,13 @@ class Point{
 
         // console.log(rect)
 
-        let window = document.body.clientWidth;
-
-        let heigth = document.body.clientHeight;
-
-        if(window > 952){
+        if(document.body.clientWidth > 952){
 
             thisObject.rect.addEventListener("mousemove", (event) => {
 
                 [posX, posY] = getTransformPos(thisObject.element)
 
-                cursorX = (event.clientX - rect.x)
+                cursorX = (event.clientX - rect.x - cursorOffsetX)
 
                 cursorY = (window.scrollY + event.clientY - rect.y)
 
@@ -2339,31 +2343,43 @@ class Triangle{
 
 
 
+function makeTriangle(){
 
+    if (document.querySelector(".hero")){
 
+        let lineOneTwo = new Line("shape-circle-line-onetwo");
 
+        let lineOneThree = new Line("shape-circle-line-onethree");
 
-let lineOneTwo = new Line("shape-circle-line-onetwo");
+        let lineOneCenter = new Line("shape-circle-line-onecenter");
 
-let lineOneThree = new Line("shape-circle-line-onethree");
+        let lineTwoThree = new Line("shape-circle-line-twothree");
 
-let lineOneCenter = new Line("shape-circle-line-onecenter");
+        let lineTwoCenter = new Line("shape-circle-line-twocenter");
 
-let lineTwoThree = new Line("shape-circle-line-twothree");
+        let lineThreeCenter = new Line("shape-circle-line-threecenter");
 
-let lineTwoCenter = new Line("shape-circle-line-twocenter");
+        let pointOne = new Point("shape-circle-one", [lineOneTwo, lineOneThree, lineOneCenter], document.getElementById("shape-rect-one"));
 
-let lineThreeCenter = new Line("shape-circle-line-threecenter");
+        let pointTwo = new Point("shape-circle-two", [lineOneTwo, lineTwoThree, lineTwoCenter], document.getElementById("shape-rect-two"));
 
-let pointOne = new Point("shape-circle-one", [lineOneTwo, lineOneThree, lineOneCenter], document.getElementById("shape-rect-one"));
+        let pointThree = new Point("shape-circle-three", [lineOneThree, lineTwoThree, lineThreeCenter], document.getElementById("shape-rect-three"));
 
-let pointTwo = new Point("shape-circle-two", [lineOneTwo, lineTwoThree, lineTwoCenter], document.getElementById("shape-rect-two"));
+        let trg = new Triangle([pointOne, pointTwo, pointThree]);
 
-let pointThree = new Point("shape-circle-three", [lineOneThree, lineTwoThree, lineThreeCenter], document.getElementById("shape-rect-three"));
+        return trg
 
-let trg = new Triangle([pointOne, pointTwo, pointThree]);
+    }
 
+    else {
 
+        return null;
+
+    }
+
+}
+
+const trg = makeTriangle();
 
 
 
