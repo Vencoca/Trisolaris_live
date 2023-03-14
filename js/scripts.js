@@ -2089,6 +2089,8 @@ class Point{
 
         let window = document.body.clientWidth;
 
+        let heigth = document.body.clientHeight;
+
         if(window > 952){
 
             thisObject.rect.addEventListener("mousemove", (event) => {
@@ -2097,7 +2099,7 @@ class Point{
 
                 cursorX = (event.clientX - rect.x)
 
-                cursorY = (event.clientY - rect.y)
+                cursorY = (window.scrollY + event.clientY - rect.y)
 
                 diffX = posX*transformCoeff - cursorX;
 
@@ -2109,9 +2111,9 @@ class Point{
 
                 sinA = diffY/r;
 
-                console.log(event.clientX, event.offsetX)
+                //console.log(event.clientY + document.body.clientHeight*smoother.progress)
 
-                // console.log([cursorX, cursorY], [posX/10*8, posY/10*8], [diffX, diffY], r)
+                //console.log([cursorX, cursorY], [posX, posY], [diffX, diffY], r)
 
                 if(r > Math.sqrt(tmp.offsetX*tmp.offsetX + tmp.offsetY*tmp.offsetY)/200){
 
@@ -2279,7 +2281,9 @@ class Triangle{
 
                 renderTl.to([point.element,point.rect], {
 
-                    duration: 30, 
+                    duration: 30,
+
+                    //duration: 0.5, 
 
                     // duration: 100000, 
 
