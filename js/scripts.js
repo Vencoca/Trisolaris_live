@@ -1127,14 +1127,19 @@ if(document.querySelector(".hero")){
 
 
     const loaderTl = gsap.timeline({
-        onComplete: () => {smoother.paused(false);trg.renderMotion();},
+        onComplete: () => {smoother.paused(false);trg.renderMotion()},
     }).pause()
     loaderTl.to(".hero__content__circle",{
         scale: 1,
         duration: 1.2,
         ease: "power1.Out",
+        onComplete: function () {
+            this.targets().forEach(element => {
+                element.style.transform = null;
+            });
+        }
     })
-    loaderTl.to(".hero__shape",{
+    loaderTl.to(".hero__shape svg",{
         scale: 1,
         duration: 1.2,
         ease: "power1.0ut",
@@ -1143,6 +1148,11 @@ if(document.querySelector(".hero")){
         scale: 1,
         duration: 0.9,
         ease: "power1.Out",
+        onComplete: function () {
+            this.targets().forEach(element => {
+                element.style.transform = null;
+            });
+        }
     }, "<0.2")
 
     loaderTl.to(".nav",{
@@ -1150,14 +1160,7 @@ if(document.querySelector(".hero")){
         duration: 1.3,
         ease: "power1.Out",
     },"<0.7")
-
-    loaderTl.to(".hero__content__circle__ring__text",{
-        transform: "scale(1) translate(-50%, -50%)",
-        duration: 1.2,
-        ease: "power1.0ut",
-    },"0")
-
-    window.addEventListener("load", () => {loaderTl.play()})
+    window.addEventListener("load", () => {loaderTl.play();})
 }
 if(document.querySelector(".white")){
     const whiteTextAnimation = document.querySelector(".white-text-animation")
@@ -1976,9 +1979,31 @@ if(false){
     }
 
 
-const triangleR = 300
+// let triangleR = 300
+
+// let transformCoeff = 1
 
 
+
+let triangleR = Number(document.querySelector("#shape-rect-one").attributes.r.nodeValue)/1000*document.querySelector("#triangle").clientWidth;
+
+let transformCoeff = document.querySelector("#triangle").clientWidth/1000
+
+
+
+window.addEventListener("resize", function(){
+
+    triangleR = Number(document.querySelector("#shape-rect-one").attributes.r.nodeValue)/1000*document.querySelector("#triangle").clientWidth;
+
+    transformCoeff = document.querySelector("#triangle").clientWidth/1000
+
+    // console.log(triangleR, transformCoeff)
+
+})
+
+
+
+// console.log(triangleR, transformCoeff)
 
 class Point{
 
@@ -2026,7 +2051,7 @@ class Point{
 
         })
 
-        this.x = cords[0];   
+        this.x = cords[0];
 
         this.y = cords[1];
 
@@ -2046,7 +2071,7 @@ class Point{
 
     setOffset(thisObject){
 
-        console.log("setting");
+        // console.log("setting");
 
         let lastR = 0;
 
@@ -2060,89 +2085,33 @@ class Point{
 
         let rect = thisObject.element.parentElement.getBoundingClientRect()
 
-        let window = document.body.clientWidth ;
+        // console.log(rect)
+
+        let window = document.body.clientWidth;
 
         if(window > 952){
 
             thisObject.rect.addEventListener("mousemove", (event) => {
 
-                transform = thisObject.element.attributes.valueOf().transform.nodeValue.slice(7,-1).split(",")
-
-                posX = Number(transform[transform.length - 2])+Number(thisObject.element.attributes.cx.nodeValue);
-
-                posY = Number(transform[transform.length - 1])+Number(thisObject.element.attributes.cy.nodeValue);
+                [posX, posY] = getTransformPos(thisObject.element)
 
                 cursorX = (event.clientX - rect.x)
 
                 cursorY = (event.clientY - rect.y)
 
-                diffX = posX - cursorX;
+                diffX = posX*transformCoeff - cursorX;
 
-                diffY =  posY - cursorY;
+                diffY =  posY*transformCoeff - cursorY;
 
                 r = Math.sqrt(diffX*diffX + diffY*diffY);
-
-                // console.log(r);
 
                 cosA = diffX/r;
 
                 sinA = diffY/r;
 
+                // console.log([cursorX, cursorY], [posX/10*8, posY/10*8], [diffX, diffY], r)
+
                 if(r > Math.sqrt(tmp.offsetX*tmp.offsetX + tmp.offsetY*tmp.offsetY)/200){
-
-                    // gsap.to(thisObject, {
-
-                    //     offsetX : cosA * 120*triangleR/r,
-
-                    //     offsetY: sinA * 120*triangleR/r,
-
-                    //     duration: 2,
-
-                    //     overwrite: true,
-
-                    //     onUpdate: function() {
-
-                    //         thisObject.rect.setAttribute("cx", thisObject.originX + thisObject.offsetX,);
-
-                    //         thisObject.rect.setAttribute("cy", thisObject.originY + thisObject.offsetY);
-
-                    //         thisObject.element.setAttribute("cx", thisObject.originX + thisObject.offsetX);
-
-                    //         thisObject.element.setAttribute("cy", thisObject.originY + thisObject.offsetY);
-
-                    //         console.log("im going in",thisObject.offsetX, thisObject.offsetY)
-
-                    //     },
-
-                    //     onComplete: function(){
-
-                    //         gsap.to(thisObject, {
-
-                    //             offsetX: 0,
-
-                    //             offsetY: 0,
-
-                    //             duration: 2,
-
-                    //             onUpdate: function() {
-
-                    //                 thisObject.rect.setAttribute("cx", thisObject.originX + thisObject.offsetX,);
-
-                    //                 thisObject.rect.setAttribute("cy", thisObject.originY + thisObject.offsetY);
-
-                    //                 thisObject.element.setAttribute("cx", thisObject.originX + thisObject.offsetX);
-
-                    //                 thisObject.element.setAttribute("cy", thisObject.originY + thisObject.offsetY);
-
-                    //                 console.log("im going back",thisObject.offsetX, thisObject.offsetY)
-
-                    //             }
-
-                    //         })
-
-                    //     }
-
-                    // })
 
                     tmp.offsetX = cosA * 600*(1-r/triangleR);
 
@@ -2184,13 +2153,7 @@ class Point{
 
                                                 thisObject.element.setAttribute("cy", thisObject.originY + thisObject.offsetY);
 
-
-
-                                                let transform = thisObject.element.attributes.valueOf().transform.nodeValue.slice(7,-1).split(",")
-
-                                                let posX = Number(transform[transform.length - 2])+Number(thisObject.element.attributes.cx.nodeValue);
-
-                                                let posY = Number(transform[transform.length - 1])+Number(thisObject.element.attributes.cy.nodeValue);
+                                                let [posX, posY] = getTransformPos(thisObject.element)
 
                                                 thisObject.updateLines([posX, posY]);
 
@@ -2202,45 +2165,7 @@ class Point{
 
                     });
 
-                    // thisObject.offsetX = cosA * 6000/r;
-
-                    // thisObject.offsetY = sinA * 6000/r;
-
-                    //console.log(thisObject.offsetX, thisObject.offsetY);
-
-                    /*
-
-                    tl.to(thisObject, {
-
-                        offsetX: 0,
-
-                        offsetY: 0,
-
-                        duration: 2,
-
-                        onUpdate: function() {
-
-                            thisObject.rect.setAttribute("cx", thisObject.originX + thisObject.offsetX,);
-
-                            thisObject.rect.setAttribute("cy", thisObject.originY + thisObject.offsetY);
-
-                            thisObject.element.setAttribute("cx", thisObject.originX + thisObject.offsetX);
-
-                            thisObject.element.setAttribute("cy", thisObject.originY + thisObject.offsetY);
-
-                            // console.log(thisObject.offsetX, thisObject.offsetY)
-
-                        }
-
-                    })*/
-
                 }
-
-
-
-                
-
-                
 
                 //console.log(this.offsetX, this.offsetY);
 
@@ -2320,57 +2245,79 @@ class Triangle{
 
     renderMotion(){
 
-        var renderTl = gsap.timeline({
+        let points = this.points
 
-            repeat: -1,
+        let tl = render(0, points);
+
+
+
+        window.addEventListener("resize", function() {
+
+            let progress = tl.progress();
+
+            tl.kill();
+
+            tl = render(progress, points);
 
         });
 
-        let number = 0;
+          
 
-        this.points.forEach(point => {
+        function render(progress, points) {
 
-            renderTl.to([point.element,point.rect], {
+            var renderTl = gsap.timeline({
 
-                duration: 30, 
+                repeat: -1,
 
-                ease: "none",
+            });
 
-                immediateRender: true,
+            let number = 0;
 
-                motionPath: {
+            points.forEach(point => {
 
-                    path: "#path"+number,
+                renderTl.to([point.element,point.rect], {
 
-                    align: "#path"+number,
+                    duration: 30, 
 
-                    alignOrigin: [0.5, 0.5],
+                    // duration: 100000, 
 
-                    //autoRotate: 90,
+                    ease: "none",
 
-                },
+                    immediateRender: true,
 
-                onUpdate: function(){
+                    motionPath: {
 
-                    
+                        path: "#path"+number,
 
-                    let transform = point.element.attributes.valueOf().transform.nodeValue.slice(7,-1).split(",")
+                        align: "#path"+number,
 
-                    let posX = Number(transform[transform.length - 2])+Number(point.element.attributes.cx.nodeValue);
+                        alignOrigin: [0.5, 0.5],
 
-                    let posY = Number(transform[transform.length - 1])+Number(point.element.attributes.cy.nodeValue);
+                        //autoRotate: 90,
 
-                    point.updateLines([posX+point.offsetX, posY+point.offsetY]);
+                    },
 
-                }
+                    onUpdate: function(){
 
-            },"<");
+                        let [posX, posY] = getTransformPos(point.element)
 
-            point.setOffset(point)
+                        point.updateLines([posX+point.offsetX, posY+point.offsetY]);
 
-            number = number + 1;
+                    }
 
-        })
+                },"<");
+
+                point.setOffset(point)
+
+                number = number + 1;
+
+            })
+
+            renderTl.progress(progress)
+
+            return renderTl
+
+        }
 
         
 
@@ -2409,6 +2356,26 @@ let pointTwo = new Point("shape-circle-two", [lineOneTwo, lineTwoThree, lineTwoC
 let pointThree = new Point("shape-circle-three", [lineOneThree, lineTwoThree, lineThreeCenter], document.getElementById("shape-rect-three"));
 
 let trg = new Triangle([pointOne, pointTwo, pointThree]);
+
+
+
+
+
+function getTransformPos(element) {
+
+    var transform = element.attributes.valueOf().transform.nodeValue.slice(7,-1).split(",")
+
+
+
+    return [
+
+        (Number(transform[transform.length - 2])+Number(element.attributes.cx.nodeValue)),
+
+        (Number(transform[transform.length - 1])+Number(element.attributes.cy.nodeValue))
+
+    ]
+
+}
 
 
 
